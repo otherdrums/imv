@@ -698,7 +698,11 @@ static void create_window(struct imv_window *window, int width, int height,
   EGLConfig config;
   EGLint num_config;
   eglChooseConfig(window->egl_display, attributes, &config, 1, &num_config);
-  window->egl_context = eglCreateContext(window->egl_display, config, EGL_NO_CONTEXT, NULL);
+  EGLint context_attributes[] = {
+    EGL_CONTEXT_OPENGL_PROFILE_MASK, EGL_CONTEXT_OPENGL_COMPATIBILITY_PROFILE_BIT,
+    EGL_NONE
+  };
+  window->egl_context = eglCreateContext(window->egl_display, config, EGL_NO_CONTEXT, context_attributes);
   assert(window->egl_context);
 
   window->wl_surface = wl_compositor_create_surface(window->wl_compositor);
